@@ -52,6 +52,9 @@ class Rem(commands.AutoShardedBot):
             shard_count=2,
         )
 
+
+
+    
     async def setup_hook(self):
         await run_startup_migrations()
         await get_anti_db()
