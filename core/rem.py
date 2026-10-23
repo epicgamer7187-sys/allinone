@@ -55,19 +55,23 @@ class Rem(commands.AutoShardedBot):
 
 
     
+    
     async def setup_hook(self):
         await run_startup_migrations()
         await get_anti_db()
+
         self.session = aiohttp.ClientSession()
-        # Inside setup_hook(), after self.session = aiohttp.ClientSession()
-try:
-    application_emojis = await self.fetch_application_emojis()
-    updated = apply_application_emojis(application_emojis)
-    log.info("Application emoji constants updated: %s", updated)
-except discord.HTTPException:
-    log.exception("Failed to fetch application emojis")
+
+        try:
+            application_emojis = await self.fetch_application_emojis()
+            updated = apply_application_emojis(application_emojis)
+            log.info("Application emoji constants updated: %s", updated)
+        except discord.HTTPException:
+            log.exception("Failed to fetch application emojis")
+
         self.add_check(self._global_security_check)
         self.tree.interaction_check = self._interaction_security_check
+
         await self.load_extensions()
 
     async def _deny_access(self, ctx: Context, decision: AccessDecision) -> None:
